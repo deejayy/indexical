@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Indexical Settings</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Options page specific styles */
+      body {
+        padding: var(--spacing-lg);
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: var(--spacing-xl);
+      }
+
+      h1 {
+        margin-bottom: var(--spacing-xl);
+      }
+
+      .section {
+        margin-bottom: var(--spacing-xl);
+      }
+
+      .section h2 {
+        margin-bottom: var(--spacing-md);
+      }
+
+      .section p {
+        margin-bottom: var(--spacing-md);
+      }
+
+      textarea {
+        font-family: var(--font-family-mono);
+      }
+
+      .button-group {
+        display: flex;
+        gap: var(--spacing-sm);
+        margin-top: var(--spacing-lg);
+      }
+
+      #saveBtn {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+      }
+
+      #saveBtn:hover {
+        background: var(--color-primary-hover);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Indexical Settings</h1>
+
+      <div id="status" class="status"></div>
+
+      <div class="section">
+        <h2>Connection Settings</h2>
+        <p>Configure the connection to your local Indexical daemon.</p>
+
+        <div class="form-group">
+          <label for="daemonUrl">Daemon URL</label>
+          <input
+            type="text"
+            id="daemonUrl"
+            placeholder="http://127.0.0.1:11435"
+          />
+          <div class="help-text">
+            The URL where your Indexical daemon is running
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="userId">API Key</label>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="text" id="userId" style="flex: 1;" readonly />
+            <button id="modifyUserIdBtn" class="btn-secondary" type="button">Modify</button>
+          </div>
+          <div class="help-text">
+            Your unique API key for authentication (auto-generated, base62-encoded)
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Domain Blacklist</h2>
+        <p>
+          Pages from these domains will not be captured. Enter one domain per
+          line.
+        </p>
+
+        <div class="form-group">
+          <textarea
+            id="blacklistDomains"
+            placeholder="facebook.com&#10;gmail.com&#10;paypal.com"
+          ></textarea>
+          <div class="help-text">
+            Subdomains are automatically included (e.g., "google.com" blocks
+            "mail.google.com")
+          </div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button id="saveBtn">Save Settings</button>
+        <button id="resetBtn" class="btn-secondary">Reset to Defaults</button>
+      </div>
+    </div>
+
+    <script src="logger.js"></script>
+    <script src="config.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

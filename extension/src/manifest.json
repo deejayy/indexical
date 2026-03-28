@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "Indexical",
+  "version": "0.2.0",
+  "description": "Semantic memory of visited pages using a local Ollama daemon.",
+  "permissions": ["tabs", "activeTab", "storage", "alarms"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "scripts": ["logger.js", "config.js", "background.js"],
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Indexical",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "64": "favicon-64.png",
+      "128": "favicon-128.png",
+      "256": "favicon-256.png",
+      "512": "favicon.png"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "64": "favicon-64.png",
+    "128": "favicon-128.png",
+    "256": "favicon-256.png",
+    "512": "favicon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["logger.js", "config.js", "Readability.js", "turndown.js", "turndown-plugin-gfm.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["results.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "commands": {
+    "open-search": {
+      "description": "Open Indexical search"
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "indexical@example.com"
+    }
+  }
+}

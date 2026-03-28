@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Indexical Search</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      html, body { height: 100%; }
+
+      .header {
+        background: var(--color-bg-primary);
+        padding: var(--spacing-lg) var(--spacing-xl);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: var(--spacing-lg);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xl);
+        flex-shrink: 0;
+      }
+
+      .logo {
+        font-size: var(--font-size-2xl);
+        font-weight: bold;
+        color: var(--color-primary);
+      }
+
+      .search-box {
+        display: flex;
+        flex-grow: 1;
+        gap: var(--spacing-lg);
+      }
+
+      #query {
+        flex: 1;
+        font-size: var(--font-size-md);
+        border-radius: var(--radius-full);
+      }
+
+      #searchBtn {
+        padding: var(--spacing-md) var(--spacing-xl);
+        font-size: var(--font-size-base);
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-full);
+      }
+
+      #searchBtn:hover {
+        background: var(--color-primary-hover);
+      }
+
+      #dateRange {
+        width: auto;
+        flex-shrink: 0;
+        border-radius: var(--radius-full);
+        appearance: none;
+        -webkit-appearance: none;
+        padding-right: calc(var(--spacing-md) + 1.25em);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2370757a'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right var(--spacing-md) center;
+      }
+
+      .stats {
+        color: var(--color-text-tertiary);
+        font-size: var(--font-size-base);
+        margin-bottom: var(--spacing-sm);
+        padding: 0 var(--spacing-xl);
+      }
+
+      #results {
+        /* background: var(--color-bg-primary);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm); */
+        padding: var(--spacing-lg) var(--spacing-xl);
+      }
+
+      .result {
+        margin-bottom: var(--spacing-xl);
+        padding-bottom: var(--spacing-lg);
+        border-bottom: 1px solid var(--color-border-light);
+        padding: var(--spacing-md);
+        margin-left: calc(var(--spacing-md) * -1);
+        margin-right: calc(var(--spacing-md) * -1);
+        border-radius: var(--radius-lg);
+        border-bottom: 1px solid var(--color-border-light);
+      }
+
+      .result .title {
+        font-size: var(--font-size-xl);
+        font-weight: 400;
+        margin-bottom: var(--spacing-xs);
+      }
+    </style>
+  </head>
+  <body style="height: 100%; display: flex; flex-direction: column;">
+    <div class="header">
+      <div class="logo"><img src="favicon.svg" alt="" style="height: 1.5rem; vertical-align: middle;"> Indexical</div>
+      <div class="search-box">
+        <input
+          id="query"
+          type="text"
+          placeholder="Search your browsing history..."
+          autofocus
+        />
+        <button id="searchBtn">Search</button>
+        <select id="dateRange" title="Date range">
+          <option value="">All time</option>
+          <option value="day">Past day</option>
+          <option value="week">Past week</option>
+          <option value="month">Past month</option>
+          <option value="year">Past year</option>
+        </select>
+      </div>
+    </div>
+    <div class="container" style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
+      <div id="stats" class="stats" style="display: none"></div>
+      <div id="corrections-notice" class="corrections-notice" style="display: none"></div>
+
+      <div id="results-pane" class="results-pane" style="flex: 1; min-height: 0;">
+        <div id="results" class="results-list"></div>
+
+        <aside id="preview-panel" class="preview-panel" aria-label="Markdown preview">
+          <div class="preview-panel-header">
+            <span class="preview-panel-title" id="preview-panel-title">Preview</span>
+            <button class="preview-close-btn btn-small" id="preview-close-btn" title="Close preview">Close</button>
+          </div>
+          <div class="markdown-body" id="preview-body"></div>
+        </aside>
+      </div>
+    </div>
+
+    <script src="logger.js"></script>
+    <script src="config.js"></script>
+    <script src="marked.umd.js"></script>
+    <script src="purify.min.js"></script>
+    <script src="utils.js"></script>
+    <script src="results.js"></script>
+  </body>
+</html>
