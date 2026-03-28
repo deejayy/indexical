@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Indexical",
   "version": "0.2.0",
-  "description": "Semantic memory of visited pages using a local Ollama daemon.",
+  "description": "Semantic memory of visited pages using a local server (SQLite).",
   "permissions": ["tabs", "activeTab", "storage", "alarms"],
   "host_permissions": ["<all_urls>"],
   "background": {
@@ -49,7 +49,14 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "indexical@example.com"
+      "id": "d2b38c73-131e-487c-8275-41cc5e0f4d92",
+      "data_collection_permissions": {
+        "required": [
+          "browsingActivity",
+          "websiteContent",
+          "searchTerms"
+        ]
+      }
     }
   }
 }
