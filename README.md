@@ -154,6 +154,55 @@ npm run bundle
 
 Produces `dist/bundle/` — a self-contained directory with the Node.js binary, compiled code, production dependencies, spellfix1 libraries, and launcher scripts (`indexical` / `indexical.cmd` / `indexical.ps1`). No system Node.js required.
 
+### Running as a Windows Service
+
+To have Indexical start automatically on boot and run in the background, install the executable as a Windows service. Two options:
+
+#### Option A — NSSM (recommended)
+
+[NSSM](https://nssm.cc/) (Non-Sucking Service Manager) is a lightweight tool for running any executable as a service.
+
+```powershell
+# Install the service
+nssm install Indexical C:\path\to\indexical.exe
+
+# Optional: set environment variables
+nssm set Indexical AppEnvironmentExtra DB_PATH=C:\ProgramData\Indexical\indexical.db
+nssm set Indexical AppEnvironmentExtra +LOG_LEVEL=info
+
+# Optional: configure output logging
+nssm set Indexical AppStdout C:\ProgramData\Indexical\service.log
+nssm set Indexical AppStderr C:\ProgramData\Indexical\service.log
+
+# Start the service
+nssm start Indexical
+```
+
+To remove: `nssm remove Indexical confirm`
+
+#### Option B — PowerShell (no extra tools)
+
+Requires an elevated (Administrator) shell. Uses the built-in `New-Service` cmdlet.
+
+```powershell
+New-Service -Name "Indexical" `
+  -BinaryPathName "C:\path\to\indexical.exe" `
+  -DisplayName "Indexical" `
+  -Description "Indexical local search daemon" `
+  -StartupType Automatic
+
+Start-Service Indexical
+```
+
+To remove:
+
+```powershell
+Stop-Service Indexical
+sc.exe delete Indexical
+```
+
+> **Note:** `New-Service` expects the executable to implement the Windows Service Control Manager protocol. Node.js SEA binaries don't do this natively, so the service may report a startup timeout warning — but the process will still run. If this is a problem, use NSSM instead.
+
 ### Configuration
 
 All settings have sensible defaults. Override via environment variables:

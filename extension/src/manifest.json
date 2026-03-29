@@ -29,6 +29,9 @@
     "256": "favicon-256.png",
     "512": "favicon.png"
   },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' http: https: ws: wss:"
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
