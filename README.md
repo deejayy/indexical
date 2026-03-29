@@ -4,6 +4,27 @@ A browser extension and local server that automatically captures the content of 
 
 All data stays on your machine. The server binds to `127.0.0.1` by default and never phones home (there is no home, actually).
 
+## Supported Platforms
+
+### Browser Extension
+
+| Browser | Status | Install |
+|---------|--------|---------|
+| Firefox | Supported | [Install from AMO](https://addons.mozilla.org/en-US/firefox/addon/indexical/) |
+| Chrome | Supported | Load unpacked from `extension/src/` ([instructions](#chrome--chromium)) |
+| Edge, Brave, etc. | Should work | Any Chromium-based browser that supports MV3 |
+
+### Server Deployment
+
+| Method | Platform | What you get |
+|--------|----------|--------------|
+| **Single executable** | Windows x64 | One-file `indexical.exe` — download from [Releases](../../releases), run it. No dependencies. |
+| **Docker** | Linux, macOS, Windows | `docker compose up -d` — container with health checks, named volume, auto-restart. |
+| **Standalone bundle** | Windows, macOS, Linux | Self-contained directory with embedded Node.js binary and launcher scripts. No system Node.js required. |
+| **From source** | Windows, macOS, Linux | `npm install && npm start` — requires Node.js 22+. |
+
+The spellfix1 SQLite extension (for spelling correction) is bundled for Windows (x64, x86, ARM64), macOS (x64/ARM64 universal), and Linux (x64, x86).
+
 ## How It Works
 
 1. **You browse the web normally.** The extension runs silently in the background, extracting the readable content of each page you visit (via Mozilla Readability), converting it to Markdown, and sending it to a local server.
@@ -36,7 +57,7 @@ The extension captures metadata too: title, author, excerpt, site name, favicon,
 ### Capture
 
 - Runs automatically on every page at `document_idle`
-- Extracts clean article content via [Mozilla Readability](https://github.com/nicfontaine/nicfontaine) with DOM-walk fallback
+- Extracts clean article content via [Mozilla Readability](https://github.com/mozilla/readability) with DOM-walk fallback
 - Converts to GFM Markdown via [Turndown](https://github.com/mixmark-io/turndown)
 - Detects SPA navigation via MutationObserver and re-captures on significant content changes
 - Client-side deduplication via content hashing (stable hash ignores timestamps/numbers)
@@ -58,19 +79,26 @@ The extension captures metadata too: title, author, excerpt, site name, favicon,
 - **Dark mode** — automatic, follows your system preference
 - **Daemon status** — red badge on the toolbar icon when the server is unreachable
 
-## Supported Browsers
-
-| Browser | Status | Notes |
-|---------|--------|-------|
-| Firefox | Supported | Manifest V3 event page. Load via `about:debugging` or install `.xpi`. |
-| Chrome | Supported | Manifest V3 service worker. Load unpacked or install `.zip`. |
-| Edge, Brave, etc. | Should work | Any Chromium-based browser that supports MV3 and `chrome.*` APIs. |
-
 ## Getting Started
 
 ### 1. Start the Server
 
-The server requires [Node.js](https://nodejs.org/) 22 or later.
+Pick whichever deployment method suits you:
+
+**Option A — Single executable (Windows):**
+
+Download `indexical.exe` from the [Releases](../../releases) page and run it. No installation, no dependencies.
+
+**Option B — Docker:**
+
+```bash
+cd server
+docker compose up -d
+```
+
+**Option C — From source:**
+
+Requires [Node.js](https://nodejs.org/) 22 or later.
 
 ```bash
 cd server
@@ -78,13 +106,15 @@ npm install
 npm start
 ```
 
-The server starts on `http://127.0.0.1:11435` and creates `indexical.db` in the server directory. Migrations run automatically on first start.
-
-The spellfix1 SQLite extension is bundled for Windows (x64, x86, ARM64), macOS (x64/ARM64 universal), and Linux (x64, x86) in `server/lib/`. It loads automatically.
+The server starts on `http://127.0.0.1:11435` and creates `indexical.db` in the working directory. Migrations run automatically on first start.
 
 ### 2. Install the Extension
 
 **Firefox:**
+
+Install from [AMO](https://addons.mozilla.org/en-US/firefox/addon/indexical/).
+
+Or load temporarily for development:
 1. Open `about:debugging#/runtime/this-firefox`
 2. Click "Load Temporary Add-on"
 3. Select `extension/src/manifest.json`
@@ -103,16 +133,16 @@ Click the Indexical icon in your toolbar. If the daemon is running and reachable
 
 ## Server
 
-### Running with Docker
+### Docker
 
 ```bash
 cd server
 docker compose up -d
 ```
 
-This binds port `11435`, stores data in a named volume (`indexical-data`), and includes a health check. The container uses `tini` as PID 1 for proper signal handling.
+Binds port `11435`, stores data in a named volume (`indexical-data`), includes a health check, and restarts automatically. The container uses `tini` as PID 1 for proper signal handling.
 
-### Running as a Standalone Bundle
+### Standalone Bundle
 
 ```bash
 cd server
@@ -121,7 +151,7 @@ npm run bundle
 
 Produces `dist/bundle/` — a self-contained directory with the Node.js binary, compiled code, production dependencies, spellfix1 libraries, and launcher scripts (`indexical` / `indexical.cmd` / `indexical.ps1`). No system Node.js required.
 
-### Running as a Single Executable
+### Single Executable
 
 ```bash
 cd server
@@ -129,6 +159,8 @@ npm run build:sea
 ```
 
 Produces `dist/indexical.exe` (Windows) — a true single-file executable. Native addons and migration files are embedded as SEA assets and extracted to a temp directory at runtime.
+
+Pre-built Windows binaries are available on the [Releases](../../releases) page.
 
 ### Configuration
 
@@ -219,4 +251,3 @@ server/             Node.js daemon (Express, TypeScript, SQLite)
   Dockerfile        Multi-stage Docker build
   docker-compose.yml  One-command deployment
 ```
-
