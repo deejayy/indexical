@@ -11,7 +11,7 @@ All data stays on your machine. The server binds to `127.0.0.1` by default and n
 | Browser | Status | Install |
 |---------|--------|---------|
 | Firefox | Supported | [Install from AMO](https://addons.mozilla.org/en-US/firefox/addon/indexical/) |
-| Chrome | Supported | Load unpacked from `extension/src/` ([instructions](#chrome--chromium)) |
+| Chrome | Supported | Load unpacked from `extension/src/` ([instructions](#2-install-the-extension)) |
 | Edge, Brave, etc. | Should work | Any Chromium-based browser that supports MV3 |
 
 ### Server Deployment
@@ -20,7 +20,6 @@ All data stays on your machine. The server binds to `127.0.0.1` by default and n
 |--------|----------|--------------|
 | **Single executable** | Windows x64 | One-file `indexical.exe` — download from [Releases](../../releases), run it. No dependencies. |
 | **Docker** | Linux, macOS, Windows | `docker compose up -d` — container with health checks, named volume, auto-restart. |
-| **Standalone bundle** | Windows, macOS, Linux | Self-contained directory with embedded Node.js binary and launcher scripts. No system Node.js required. |
 | **From source** | Windows, macOS, Linux | `npm install && npm start` — requires Node.js 22+. |
 
 The spellfix1 SQLite extension (for spelling correction) is bundled for Windows (x64, x86, ARM64), macOS (x64/ARM64 universal), and Linux (x64, x86).
@@ -83,28 +82,11 @@ The extension captures metadata too: title, author, excerpt, site name, favicon,
 
 ### 1. Start the Server
 
-Pick whichever deployment method suits you:
+Pick whichever deployment method suits you (see [Server](#server) for details on each):
 
-**Option A — Single executable (Windows):**
-
-Download `indexical.exe` from the [Releases](../../releases) page and run it. No installation, no dependencies.
-
-**Option B — Docker:**
-
-```bash
-cd server
-docker compose up -d
-```
-
-**Option C — From source:**
-
-Requires [Node.js](https://nodejs.org/) 22 or later.
-
-```bash
-cd server
-npm install
-npm start
-```
+- **Single executable (Windows):** download `indexical.exe` from [Releases](../../releases) and run it.
+- **Docker:** `cd server && docker compose up -d`
+- **From source:** `cd server && npm install && npm start` (requires [Node.js](https://nodejs.org/) 22+)
 
 The server starts on `http://127.0.0.1:11435` and creates `indexical.db` in the working directory. Migrations run automatically on first start.
 
@@ -114,24 +96,35 @@ The server starts on `http://127.0.0.1:11435` and creates `indexical.db` in the 
 
 Install from [AMO](https://addons.mozilla.org/en-US/firefox/addon/indexical/).
 
-Or load temporarily for development:
-1. Open `about:debugging#/runtime/this-firefox`
-2. Click "Load Temporary Add-on"
-3. Select `extension/src/manifest.json`
+(or load temporarily for development)
 
 **Chrome / Chromium:**
-1. Open `chrome://extensions`
-2. Enable "Developer mode"
-3. Click "Load unpacked"
-4. Select the `extension/src/` directory
+1. Extract the indexical-chrome.zip into a directory
+2. Open `chrome://extensions`
+3. Enable "Developer mode"
+4. Click "Load unpacked"
+5. Select the directory you extracted the zip
 
-The extension generates an API key automatically on first run. Both the daemon URL and API key are configurable in the extension's Options page.
+The extension generates an API key automatically on first run (this is important for the temporary extension approach, every load counts as "first run"). Both the daemon URL and API key are configurable in the extension's Options page (so you can save it to have permanent identity or access the same history from multiple browsers).
 
 ### 3. Verify
 
 Click the Indexical icon in your toolbar. If the daemon is running and reachable, you'll see the search interface without any warning banner. Browse a few pages, then try searching.
 
 ## Server
+
+### Single Executable
+
+Pre-built Windows binaries are available on the [Releases](../../releases) page. Download and run — no installation, no dependencies.
+
+To build it yourself:
+
+```bash
+cd server
+npm run build:sea
+```
+
+Produces `dist/indexical.exe` — a true single-file executable. Native addons and migration files are embedded as SEA assets and extracted to a temp directory at runtime.
 
 ### Docker
 
@@ -142,6 +135,16 @@ docker compose up -d
 
 Binds port `11435`, stores data in a named volume (`indexical-data`), includes a health check, and restarts automatically. The container uses `tini` as PID 1 for proper signal handling.
 
+### From Source
+
+Requires [Node.js](https://nodejs.org/) 22 or later.
+
+```bash
+cd server
+npm install
+npm start
+```
+
 ### Standalone Bundle
 
 ```bash
@@ -150,17 +153,6 @@ npm run bundle
 ```
 
 Produces `dist/bundle/` — a self-contained directory with the Node.js binary, compiled code, production dependencies, spellfix1 libraries, and launcher scripts (`indexical` / `indexical.cmd` / `indexical.ps1`). No system Node.js required.
-
-### Single Executable
-
-```bash
-cd server
-npm run build:sea
-```
-
-Produces `dist/indexical.exe` (Windows) — a true single-file executable. Native addons and migration files are embedded as SEA assets and extracted to a temp directory at runtime.
-
-Pre-built Windows binaries are available on the [Releases](../../releases) page.
 
 ### Configuration
 
