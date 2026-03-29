@@ -1,0 +1,12 @@
+node_modules
+dist
+tmp
+*.db
+*.db-shm
+*.db-wal
+.git
+.idea
+.vscode
+.history
+coverage
+npm-debug.log

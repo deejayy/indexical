@@ -1,0 +1,11 @@
+DROP TRIGGER IF EXISTS pages_fts_au;
+DROP TRIGGER IF EXISTS pages_fts_ad;
+DROP TRIGGER IF EXISTS pages_fts_ai;
+DROP VIRTUAL TABLE IF EXISTS spellfix_vocab;
+DROP VIRTUAL TABLE IF EXISTS pages_fts;
+DROP INDEX IF EXISTS idx_pages_captured_at;
+DROP INDEX IF EXISTS idx_pages_stable_hash;
+DROP INDEX IF EXISTS idx_pages_user_id;
+DROP INDEX IF EXISTS idx_pages_url;
+DROP TABLE IF EXISTS pages;
+DROP TABLE IF EXISTS _migrations;

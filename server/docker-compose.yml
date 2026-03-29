@@ -1,0 +1,19 @@
+services:
+  indexical:
+    build: .
+    ports:
+      - "11435:11435"
+    volumes:
+      - indexical-data:/data
+    environment:
+      - LOG_LEVEL=info
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:11435/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  indexical-data:
