@@ -1,4 +1,4 @@
-# Indexical
+# <img src="./extension/assets/favicon.png" height="32"> Indexical
 
 A browser extension and local server that automatically captures the content of every web page you visit and lets you search through it instantly with full-text search, spelling correction, and rich filtering.
 
@@ -33,6 +33,13 @@ The spellfix1 SQLite extension (for spelling correction) is bundled for Windows 
 The extension captures metadata too: title, author, excerpt, site name, favicon, language, published/modified dates, word count, and content hashes for deduplication.
 
 ## Features
+
+<table>
+  <tr>
+    <td valign="top">A separate tab:<br/><br/><img width="1280" height="805" alt="image" src="https://github.com/user-attachments/assets/3bec0094-a162-469c-aa22-89cd57d52f64" /></td>
+    <td valign="top">As extension popup:<br/><br/><img width="376" height="537" alt="image" src="https://github.com/user-attachments/assets/923896be-bb62-42a0-9e8e-3d5703f4ab6e" /></td>
+  </tr>
+</table>
 
 ### Search
 
