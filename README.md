@@ -10,15 +10,15 @@ All data stays on your machine. The server binds to `127.0.0.1` by default and n
 
 | Browser | Status | Install |
 |---------|--------|---------|
-| Firefox | Supported | [Install from AMO](https://addons.mozilla.org/en-US/firefox/addon/indexical/) |
-| Chrome | Supported | Load unpacked from `extension/src/` ([instructions](#2-install-the-extension)) |
+| Firefox | Supported | [Install from AMO](https://addons.mozilla.org/en-US/firefox/addon/indexical/) or download `indexical-firefox-vX.Y.Z.xpi` from [Releases](../../releases) |
+| Chrome | Supported | Download `indexical-chromium-vX.Y.Z.zip` from [Releases](../../releases) ([instructions](#2-install-the-extension)) |
 | Edge, Brave, etc. | Should work | Any Chromium-based browser that supports MV3 |
 
 ### Server Deployment
 
 | Method | Platform | What you get |
 |--------|----------|--------------|
-| **Single executable** | Windows x64 | One-file `indexical.exe` — download from [Releases](../../releases), run it. No dependencies. |
+| **Single executable** | Windows, macOS, Linux | Download from [Releases](../../releases) and run. No dependencies. |
 | **Docker** | Linux, macOS, Windows | `docker compose up -d` — container with health checks, named volume, auto-restart. |
 | **From source** | Windows, macOS, Linux | `npm install && npm start` — requires Node.js 22+. |
 
@@ -91,7 +91,7 @@ The extension captures metadata too: title, author, excerpt, site name, favicon,
 
 Pick whichever deployment method suits you (see [Server](#server) for details on each):
 
-- **Single executable (Windows):** download `indexical.exe` from [Releases](../../releases) and run it.
+- **Single executable:** download from [Releases](../../releases) and run it.
 - **Docker:** `cd server && docker compose up -d`
 - **From source:** `cd server && npm install && npm start` (requires [Node.js](https://nodejs.org/) 22+)
 
@@ -101,16 +101,17 @@ The server starts on `http://127.0.0.1:11435` and creates `indexical.db` in the 
 
 **Firefox:**
 
-Install from [AMO](https://addons.mozilla.org/en-US/firefox/addon/indexical/).
+Install from [AMO](https://addons.mozilla.org/en-US/firefox/addon/indexical/), or download `indexical-firefox-vX.Y.Z.xpi` from [Releases](../../releases) and open it in Firefox.
 
-(or load temporarily for development)
+(or load temporarily for development: `about:debugging` → Load Temporary Add-on → `extension/src/manifest.json`)
 
 **Chrome / Chromium:**
-1. Extract the indexical-chrome.zip into a directory
-2. Open `chrome://extensions`
-3. Enable "Developer mode"
-4. Click "Load unpacked"
-5. Select the directory you extracted the zip
+1. Download `indexical-chromium-vX.Y.Z.zip` from [Releases](../../releases)
+2. Extract the zip into a directory
+3. Open `chrome://extensions`
+4. Enable "Developer mode"
+5. Click "Load unpacked"
+6. Select the directory you extracted the zip into
 
 The extension generates an API key automatically on first run (this is important for the temporary extension approach, every load counts as "first run"). Both the daemon URL and API key are configurable in the extension's Options page (so you can save it to have permanent identity or access the same history from multiple browsers).
 
@@ -122,7 +123,7 @@ Click the Indexical icon in your toolbar. If the daemon is running and reachable
 
 ### Single Executable
 
-Pre-built Windows binaries are available on the [Releases](../../releases) page. Download and run — no installation, no dependencies.
+Pre-built binaries for Windows (x64), macOS (ARM64), and Linux (x64) are available on the [Releases](../../releases) page. Download and run — no installation, no dependencies.
 
 To build it yourself:
 
@@ -131,7 +132,7 @@ cd server
 npm run build:sea
 ```
 
-Produces `dist/indexical.exe` — a true single-file executable. Native addons and migration files are embedded as SEA assets and extracted to a temp directory at runtime.
+Produces `dist/indexical-server` (or `.exe` on Windows) — a true single-file executable. Native addons and migration files are embedded as SEA assets and extracted to a temp directory at runtime.
 
 ### Docker
 
@@ -250,11 +251,11 @@ Authentication is via the `X-API-Key` header. The same key the extension generat
 
 ## Building the Extension
 
-The extension is plain JavaScript with no build step. For distribution archives:
+The extension is plain JavaScript with no build step. Pre-built archives are available on the [Releases](../../releases) page (`indexical-firefox-vX.Y.Z.xpi` and `indexical-chromium-vX.Y.Z.zip`). For local builds:
 
 ```bash
 cd extension
-_build.bat
+build.bat
 ```
 
 Produces `dist/indexical.xpi` (Firefox) and `dist/indexical-chrome.zip` (Chrome). Requires `7za` on PATH.

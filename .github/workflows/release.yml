@@ -34,6 +34,38 @@ jobs:
     outputs:
       version: ${{ env.VERSION }}
 
+  build-extension:
+    name: build-extension
+    needs: [create-release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build extension archives
+        run: |
+          version="${{ needs.create-release.outputs.version }}"
+          cd extension/src
+          zip -r "../../indexical-firefox-v${version}.xpi" . ../assets/
+          cp "../../indexical-firefox-v${version}.xpi" "../../indexical-chromium-v${version}.zip"
+
+      - name: Generate checksums
+        run: |
+          version="${{ needs.create-release.outputs.version }}"
+          shasum -a 256 "indexical-firefox-v${version}.xpi" > "indexical-firefox-v${version}.xpi.sha256"
+          shasum -a 256 "indexical-chromium-v${version}.zip" > "indexical-chromium-v${version}.zip.sha256"
+
+      - name: Upload to release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version="${{ needs.create-release.outputs.version }}"
+          gh release upload "v${version}" \
+            "indexical-firefox-v${version}.xpi" \
+            "indexical-firefox-v${version}.xpi.sha256" \
+            "indexical-chromium-v${version}.zip" \
+            "indexical-chromium-v${version}.zip.sha256"
+
   build-release:
     name: build-${{ matrix.build }}
     needs: [create-release]
