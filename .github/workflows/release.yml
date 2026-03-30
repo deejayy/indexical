@@ -56,13 +56,6 @@ jobs:
             ext: ""
             archive: tar.gz
 
-          - build: macos-x64
-            os: macos-13
-            platform: darwin
-            arch: x64
-            ext: ""
-            archive: tar.gz
-
           - build: macos-arm64
             os: macos-latest
             platform: darwin
@@ -77,7 +70,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 25
 
       - name: Install dependencies
         working-directory: server

@@ -29,7 +29,9 @@ function collectMigrations() {
 function platformSpellfixName() {
   switch (process.platform) {
     case 'win32':
-      return process.arch === 'ia32' ? 'spellfix1-i386.dll' : 'spellfix1.dll';
+      if (process.arch === 'ia32') return 'spellfix1-i386.dll';
+      if (process.arch === 'arm64') return 'spellfix1-arm64.dll';
+      return 'spellfix1.dll';
     case 'darwin':
       return process.arch === 'arm64' ? 'spellfix1-int.dylib' : 'spellfix1.dylib';
     case 'linux':
@@ -58,7 +60,7 @@ async function bundleApp() {
     entryPoints: [path.join(srcDir, 'server.ts')],
     bundle: true,
     platform: 'node',
-    target: 'node22',
+    target: 'node25',
     format: 'cjs',
     outfile: path.join(seaDir, 'app.cjs'),
     sourcemap: false,
