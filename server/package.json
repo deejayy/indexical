@@ -1,6 +1,6 @@
 {
   "name": "indexical-server",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Indexical Server — stores and searches browser history",
   "private": true,
   "type": "module",

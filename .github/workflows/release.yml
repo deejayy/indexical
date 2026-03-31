@@ -42,12 +42,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Stage extension files
+        run: |
+          mkdir -p _ext-stage
+          cp extension/src/* _ext-stage/
+          cp extension/assets/* _ext-stage/
+
       - name: Build extension archives
         run: |
           version="${{ needs.create-release.outputs.version }}"
-          cd extension/src
-          zip -r "../../indexical-firefox-v${version}.xpi" . ../assets/
-          cp "../../indexical-firefox-v${version}.xpi" "../../indexical-chromium-v${version}.zip"
+          cd _ext-stage
+          zip -r "../indexical-firefox-v${version}.xpi" .
+          cp "../indexical-firefox-v${version}.xpi" "../indexical-chromium-v${version}.zip"
 
       - name: Generate checksums
         run: |

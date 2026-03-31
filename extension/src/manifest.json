@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Indexical",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Semantic memory of visited pages using a local server (SQLite).",
   "permissions": ["tabs", "activeTab", "storage", "alarms"],
   "host_permissions": ["<all_urls>"],
